@@ -43,7 +43,7 @@ resource "null_resource" "ssh_docker" {
       "sudo docker run -ti -d -p 8000:8000 -p 9443:9443 -p 9000:9000 --name portainer-ce --privileged --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v ./portainer/data:/data  portainer/portainer",
       "sudo docker run -ti -d --name dozzle -v /var/run/docker.sock:/var/run/docker.sock -p 8383:8080 amir20/dozzle:latest",
       "echo install dozzle complete",
-      "sudo mv 60-static-ip.yaml /etc/netplan/00-static-ip.yaml",
+      "sudo mv 00-static-ip.yaml /etc/netplan/00-static-ip.yaml",
       "sudo chmod 600 /etc/netplan/00-static-ip.yaml",
       "sudo chmod 600 /etc/netplan/01-netcfg.yaml",
       #"sudo rm -rf 01-netcfg.yaml",
