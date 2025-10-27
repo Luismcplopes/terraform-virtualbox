@@ -27,8 +27,8 @@ resource "null_resource" "ssh_docker" {
     host        = virtualbox_vm.node.network_adapter.0.ipv4_address
     }
   provisioner "file" {
-  source      = "./60-static-ip.yaml"
-  destination = "./60-static-ip.yaml"
+  source      = "./00-static-ip.yaml"
+  destination = "./00-static-ip.yaml"
 
   }
   provisioner "remote-exec" {
