@@ -26,21 +26,29 @@ resource "null_resource" "ssh_docker" {
     #private_key = file("/path/to/your/private/key.pem")
     host        = virtualbox_vm.node.network_adapter.0.ipv4_address
     }
+  provisioner "file" {
+  source      = "./60-static-ip.yaml"
+  destination = "./60-static-ip.yaml"
 
+  }
   provisioner "remote-exec" {
     inline = [
       "echo 'Hello, World'",
       "sudo apt-get update -y",
-      "sudo apt-get install -y ca-certificates curl gnupg ipcalc",
+      "sudo apt-get install -y ca-certificates curl ipcalc dbus-user-session",
       "curl -fsSL https://test.docker.com -o test-docker.sh",
       "sudo sh test-docker.sh",
-      "sudo apt-get install -y dbus-user-session ",
       "sudo usermod -aG docker vagrant",
-      #"sudo docker volume create portainer_data",
+      "echo install docker completed",
       "sudo docker run -ti -d -p 8000:8000 -p 9443:9443 -p 9000:9000 --name portainer-ce --privileged --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v ./portainer/data:/data  portainer/portainer",
       "sudo docker run -ti -d --name dozzle -v /var/run/docker.sock:/var/run/docker.sock -p 8383:8080 amir20/dozzle:latest",
-      "echo install dozzle complete"
-      # alterar ao IP para outro
+      "echo install dozzle complete",
+      "sudo mv 60-static-ip.yaml /etc/netplan/00-static-ip.yaml",
+      "sudo chmod 600 /etc/netplan/00-static-ip.yaml",
+      "sudo chmod 600 /etc/netplan/01-netcfg.yaml",
+      #"sudo rm -rf 01-netcfg.yaml",
+      "sudo netplan apply --config-file /etc/netplan/00-static-ip.yaml",
+      "echo VM is completed"
     ]
   }
 }
